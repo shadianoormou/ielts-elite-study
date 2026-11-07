@@ -249,6 +249,14 @@ let serverSyncReady = false;
 let serverSaveTimer = null;
 let serverUpdatedAt = null;
 
+function isLocalServerHost() {
+  return ["127.0.0.1", "localhost"].includes(window.location.hostname);
+}
+
+function responseIsJson(response) {
+  return (response.headers.get("content-type") || "").toLowerCase().includes("application/json");
+}
+
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   if (!serverSyncReady) return;
@@ -257,11 +265,12 @@ function saveState() {
     try {
       const response = await fetch(SERVER_STATE_ENDPOINT, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(state) });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      if (!responseIsJson(response)) throw new Error("Expected a JSON API response");
       const payload = await response.json();
       serverUpdatedAt = payload.updatedAt || serverUpdatedAt;
     } catch (error) {
       serverSyncReady = false;
-      console.warn("Server sync paused; local persistence remains active.", error);
+      if (isLocalServerHost()) console.warn("Server sync paused; local persistence remains active.", error);
       render();
     }
   }, 180);
@@ -1018,6 +1027,7 @@ async function bootstrap() {
   try {
     const response = await fetch(SERVER_STATE_ENDPOINT, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!responseIsJson(response)) throw new Error("Expected a JSON API response");
     const payload = await response.json();
     if (payload.exists && payload.state) {
       state = mergeState(blankState(), payload.state);
@@ -1031,7 +1041,7 @@ async function bootstrap() {
     serverSyncReady = true;
   } catch (error) {
     serverSyncReady = false;
-    console.warn("SQLite server unavailable; using browser recovery mode.", error);
+    if (isLocalServerHost()) console.warn("SQLite server unavailable; using browser recovery mode.", error);
   }
   render();
 }

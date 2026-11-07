@@ -1,6 +1,12 @@
 # IELTS Elite
 
-IELTS Elite is a local-first, mobile-responsive IELTS Academic preparation workspace built from the supplied 30-Day Master Prompt.
+IELTS Elite is a local-first, mobile-responsive IELTS Academic preparation workspace built from the supplied 30-Day Master Prompt. It turns a learner’s evidence into a focused 30-day study loop: diagnose, practise, record mistakes, revise, and measure progress.
+
+## Product story
+
+Most IELTS tools give learners more content but not a clear next move. IELTS Elite keeps the learner’s evidence, priorities, practice attempts, explanations, and revision queue in one calm workspace. It is designed for independent learners and mentors who need a transparent, private study companion—not a black-box score generator.
+
+The product deliberately separates practice evidence from official results. Objective practice is scored, writing and speaking feedback is labelled heuristic, listening uses original practice material, and every boundary is visible in the interface.
 
 ## Run locally
 
@@ -18,7 +24,7 @@ Static-only fallback is still available with `python3 -m http.server 4173`, but 
 
 ## Microsoft SQL Server mode
 
-The same server supports Microsoft SQL Server through `pyodbc`. Copy [.env.example](</Users/ras/Documents/ChatGPT/IELTS application/.env.example>) into your shell environment, install `pyodbc` and Microsoft ODBC Driver 18, create the `IELTS_Elite` database, then launch with:
+The same server supports Microsoft SQL Server through `pyodbc`. Copy [.env.example](.env.example) into your shell environment, install `pyodbc` and Microsoft ODBC Driver 18, create the `IELTS_Elite` database, then launch with:
 
 ```bash
 export IELTS_DB_BACKEND=sqlserver
@@ -52,7 +58,7 @@ python3 server.py
 
 The app uses OpenAI when both OpenAI variables are present; otherwise it uses Ollama when `OLLAMA_MODEL` is set; otherwise it uses the deterministic fallback. Ollama keeps the tutor request on your own computer and has no per-token API charge, but it needs enough local RAM/CPU and does not automatically make the public Site AI-enabled. Local generation is bounded and allowed more time on slower CPUs.
 
-After the first model download, you can double-click [`run_local.command`](</Users/ras/Documents/ChatGPT/IELTS%20application/run_local.command>) or run `./run_local.command` to start the app with the free local model automatically.
+After the first model download, you can double-click [`run_local.command`](run_local.command) or run `./run_local.command` to start the app with the free local model automatically.
 
 ## Implemented journey
 
@@ -79,7 +85,6 @@ After the first model download, you can double-click [`run_local.command`](</Use
 - The mock exam has 40 original objective items plus optional subjective evidence; it is not a full official-format IELTS exam or official score conversion.
 - The public static Site is available at [IELTS Elite Study](https://ielts-elite-study.ababil-cox-8536.chatgpt.site), but its browser-only mode cannot reach the private local SQL/AI server.
 - The AI adapter is wired to the OpenAI Responses API but requires your own server-side API key and model configuration.
-- Listening uses original text-fallback items and browser text-to-speech when available; it is not equivalent to licensed IELTS audio.
 - The app applies the official IELTS overall-band rounding rule to its provisional component estimates, but it does not perform official raw-score conversion or provide an official IELTS result. Official scoring still requires an authorised IELTS test.
 
 ## Data model
@@ -88,4 +93,4 @@ The browser state record is stored under `ielts-elite-state-v1` and mirrored as 
 
 ## Verification
 
-See [QA_CHECKLIST.md](QA_CHECKLIST.md) for the manual workflow used during browser verification and the limitations that remain unverified in this local-only build.
+See [QA_CHECKLIST.md](QA_CHECKLIST.md) for the manual workflow used during browser verification and the limitations that remain unverified in this local-only build. The latest live smoke test covered all 14 workspace routes and the public static fallback on 7 November 2026.
