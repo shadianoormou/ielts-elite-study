@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IELTS Elite · Product demo</title>
+  <meta name="description" content="A narrated product demo of IELTS Elite, an evidence-led IELTS Academic preparation workspace." />
+  <style>
+    :root { color-scheme: dark; --ink:#f4f7ef; --muted:#a9bdb5; --bg:#0d2721; --lime:#c6e36f; --teal:#1c756c; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at 75% 5%,#284c3a 0,transparent 34%),var(--bg); color:var(--ink); font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(1120px,calc(100% - 40px)); margin:0 auto; padding:72px 0 80px; }
+    .eyebrow { color:var(--lime); font:12px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { max-width:760px; margin:16px 0 14px; font-size:clamp(42px,7vw,84px); line-height:.98; letter-spacing:-.06em; }
+    .lede { max-width:650px; color:var(--muted); font-size:19px; }
+    .frame { margin-top:42px; padding:10px; border:1px solid #345648; border-radius:22px; background:#102c25; box-shadow:0 24px 80px #061712aa; }
+    video { display:block; width:100%; border-radius:14px; background:#071b16; }
+    .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; color:var(--muted); font-size:14px; }
+    .meta span { padding:7px 12px; border:1px solid #315448; border-radius:999px; }
+    .links { display:flex; flex-wrap:wrap; gap:14px; margin-top:28px; }
+    a { color:#10251d; background:var(--lime); padding:11px 18px; border-radius:999px; text-decoration:none; font-weight:700; }
+    a.secondary { color:var(--ink); background:transparent; border:1px solid #597266; }
+    footer { margin-top:70px; color:#77938a; font-size:13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">IELTS ELITE · PRODUCT DEMO</div>
+    <h1>Study from evidence, not guesswork.</h1>
+    <p class="lede">A narrated walkthrough of the private, local-first IELTS Academic workspace: diagnostic evidence, adaptive planning, practice, revision, mock review, and honest scoring boundaries.</p>
+    <section class="frame">
+      <video controls preload="metadata" poster="media/ielts-elite-demo.jpg">
+        <source src="media/ielts-elite-demo.mp4" type="video/mp4" />
+        Your browser does not support embedded video. <a href="media/ielts-elite-demo.mp4">Download the demo</a>.
+      </video>
+      <div class="meta"><span>01:54 narrated demo</span><span>Evidence-led 30-day journey</span><span>Updated November 2026</span></div>
+    </section>
+    <div class="links">
+      <a href="https://ielts-elite-study.ababil-cox-8536.chatgpt.site/">Open the live workspace →</a>
+      <a class="secondary" href="https://github.com/shadianoormou/ielts-elite-study">View source on GitHub</a>
+    </div>
+    <footer>IELTS Elite keeps practice evidence separate from official IELTS results. Listening content is original practice material; Writing and Speaking feedback is heuristic.</footer>
+  </main>
+</body>
+</html>

@@ -2,6 +2,8 @@
 
 IELTS Elite is a local-first, mobile-responsive IELTS Academic preparation workspace built from the supplied 30-Day Master Prompt. It turns a learner’s evidence into a focused 30-day study loop: diagnose, practise, record mistakes, revise, and measure progress.
 
+[Watch the narrated product demo](docs/index.html) · [Open the live workspace](https://ielts-elite-study.ababil-cox-8536.chatgpt.site)
+
 ## Product story
 
 Most IELTS tools give learners more content but not a clear next move. IELTS Elite keeps the learner’s evidence, priorities, practice attempts, explanations, and revision queue in one calm workspace. It is designed for independent learners and mentors who need a transparent, private study companion—not a black-box score generator.
