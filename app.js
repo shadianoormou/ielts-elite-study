@@ -766,7 +766,7 @@ function renderAnalytics() {
 }
 
 function renderSettings() {
-  return `<div class="hero"><div><div class="eyebrow">Single-user learner space</div><h1>Settings & data</h1><p class="section-subtitle">Your records are persisted by the local SQLite server and mirrored to browser recovery storage.</p></div><span class="pill">${esc(syncStatus())}</span></div><div class="settings-grid"><div class="settings-nav"><button class="active">Profile & preferences</button><button data-action="export-data">Export learner data</button><button data-action="show-qa">Manual QA checklist</button></div><section class="card card-pad"><div class="card-head"><div><h3 class="card-title">Profile</h3><p class="card-description">User-entered planning context is kept separate from measured results.</p></div></div><div class="setting-line"><div><strong>Name</strong><span>${esc(state.profile.name)}</span></div><button class="button small ghost" data-action="edit-profile">Edit</button></div><div class="setting-line"><div><strong>Target exam</strong><span>${state.profile.examDate ? formatDate(state.profile.examDate) : "No date set"} · target band ${esc(state.profile.targetBand)}</span></div></div><div class="setting-line"><div><strong>Explanation language</strong><span>Used for future tutor and content preferences.</span></div><select class="field-input" data-action="change-language" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px"><option ${state.settings.language === "English" ? "selected" : ""}>English</option><option ${state.settings.language === "Bangla" ? "selected" : ""}>Bangla</option><option ${state.settings.language === "English + Bangla" ? "selected" : ""}>English + Bangla</option></select></div><div class="setting-line"><div><strong>Optional reminders</strong><span>No reminders are sent by this local version.</span></div><button class="switch ${state.settings.reminders ? "on" : ""}" data-action="toggle-reminders" aria-label="Toggle reminders"></button></div><div class="setting-line"><div><strong>Data portability</strong><span>Download a JSON snapshot of your profile, plans, and error records.</span></div><button class="button small secondary" data-action="export-data">Download JSON</button></div><div class="setting-line"><div><strong>Reset learner space</strong><span>Deletes all local records from this browser and SQLite.</span></div><button class="button small danger" data-action="reset-state">Reset data</button></div><div class="notice warn" style="margin-top:18px"><span>!</span><div><strong>Single-user boundary:</strong> this server is intentionally loopback-only. It is reliable for your own computer, but it is not a public multi-user deployment.</div></div></section></div>`;
+  return `<div class="hero"><div><div class="eyebrow">Private, installable learner workspace</div><h1>Settings & data</h1><p class="section-subtitle">Your records stay portable and recoverable: SQLite when the local server is available, browser storage and offline app shell everywhere else.</p></div><span class="pill">${esc(syncStatus())}</span></div><div class="settings-grid"><div class="settings-nav"><button class="active">Profile & preferences</button><button data-action="export-data">Export learner data</button><button data-action="show-qa">Manual QA checklist</button></div><section class="card card-pad"><div class="card-head"><div><h3 class="card-title">Profile</h3><p class="card-description">User-entered planning context is kept separate from measured results.</p></div></div><div class="setting-line"><div><strong>Name</strong><span>${esc(state.profile.name)}</span></div><button class="button small ghost" data-action="edit-profile">Edit</button></div><div class="setting-line"><div><strong>Target exam</strong><span>${state.profile.examDate ? formatDate(state.profile.examDate) : "No date set"} · target band ${esc(state.profile.targetBand)}</span></div></div><div class="setting-line"><div><strong>Explanation language</strong><span>Used for future tutor and content preferences.</span></div><select class="field-input" data-action="change-language" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px"><option ${state.settings.language === "English" ? "selected" : ""}>English</option><option ${state.settings.language === "Bangla" ? "selected" : ""}>Bangla</option><option ${state.settings.language === "English + Bangla" ? "selected" : ""}>English + Bangla</option></select></div><div class="setting-line"><div><strong>Optional reminders</strong><span>No reminders are sent by this local version.</span></div><button class="switch ${state.settings.reminders ? "on" : ""}" data-action="toggle-reminders" aria-label="Toggle reminders"></button></div><div class="setting-line"><div><strong>Data portability</strong><span>Download or restore a JSON snapshot of your profile, plans, and evidence.</span></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="button small secondary" data-action="export-data">Download JSON</button><button class="button small ghost" data-action="import-data">Restore JSON</button><input id="import-data" type="file" accept="application/json" hidden /></div></div><div class="setting-line"><div><strong>Reset learner space</strong><span>Deletes all local records from this browser and SQLite.</span></div><button class="button small danger" data-action="reset-state">Reset data</button></div><div class="notice" style="margin-top:18px"><span>✓</span><div><strong>Built for real daily use:</strong> install IELTS Elite from the browser menu for an offline-capable study workspace. Your data remains local-first and exportable.</div></div><div class="notice warn" style="margin-top:12px"><span>!</span><div><strong>Privacy boundary:</strong> this version is intentionally single-user. It is reliable for an individual learner, not a public multi-user account service.</div></div></section></div>`;
 }
 
 /* Enhanced labs: later declarations intentionally override the first compact renderers. */
@@ -938,6 +938,22 @@ function exportData() {
   showToast("Learner data exported as JSON.");
 }
 
+async function restoreData(event) {
+  const file = event.target.files?.[0];
+  event.target.value = "";
+  if (!file) return;
+  try {
+    const imported = JSON.parse(await file.text());
+    if (!imported || typeof imported !== "object" || Array.isArray(imported)) throw new Error("The file is not a learner-state JSON object.");
+    state = mergeState(blankState(), imported);
+    saveState();
+    render();
+    showToast("Learner data restored from JSON.");
+  } catch (error) {
+    showToast(`Restore failed: ${error.message || "invalid JSON"}`);
+  }
+}
+
 function editProfile() {
   const name = window.prompt("Name", state.profile.name);
   if (name && name.trim()) { state.profile.name = name.trim(); saveState(); render(); showToast("Profile updated."); }
@@ -973,6 +989,7 @@ document.addEventListener("input", (event) => {
 
 document.addEventListener("change", (event) => {
   const action = event.target.dataset.action;
+  if (event.target.id === "import-data") restoreData(event);
   if (action === "toggle-task") toggleTask(event.target.dataset.taskId);
   if (action === "diagnostic-answer") { state.diagnostic.answers[event.target.dataset.questionId] = event.target.value; state.diagnostic.status = "in-progress"; saveState(); render(); }
   if (action === "listening-answer") { state.practice.listeningAnswers[event.target.dataset.questionId] = event.target.value; saveState(); render(); }
@@ -1016,6 +1033,7 @@ document.addEventListener("click", (event) => {
   if (action === "reset-mock") { state.mock = { status: "not-started", answers: {}, text: { writing: "", speaking: "" }, startedAt: null, result: null }; saveState(); render(); }
   if (action === "mark-top-corrected") { const open = state.errors.find((error) => !error.corrected); if (open) { open.corrected = true; saveState(); showToast("Correction recorded. Priority will fall on the next refresh."); render(); } else showToast("No open error to mark."); }
   if (action === "export-data") exportData();
+  if (action === "import-data") document.querySelector("#import-data")?.click();
   if (action === "edit-profile") editProfile();
   if (action === "toggle-reminders") { state.settings.reminders = !state.settings.reminders; saveState(); render(); }
   if (action === "reset-state") { if (window.confirm("Reset all local learner data? This cannot be undone.")) { localStorage.removeItem(STORAGE_KEY); state = blankState(); saveState(); render(); showToast("Local learner space reset."); } }

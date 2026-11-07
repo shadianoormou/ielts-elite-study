@@ -1,8 +1,8 @@
 # IELTS Elite
 
-IELTS Elite is a local-first, mobile-responsive IELTS Academic preparation workspace built from the supplied 30-Day Master Prompt. It turns a learner’s evidence into a focused 30-day study loop: diagnose, practise, record mistakes, revise, and measure progress.
+IELTS Elite is a privacy-first, mobile-responsive IELTS Academic preparation product built from the supplied 30-Day Master Prompt. It turns a learner’s evidence into a focused 30-day study loop: diagnose, practise, record mistakes, revise, and measure progress. The live browser workspace is installable as a PWA, works offline after first load, and keeps learner data portable through JSON backup and restore.
 
-[Watch the narrated product demo](docs/index.html) · [Open the live workspace](https://ielts-elite-study.ababil-cox-8536.chatgpt.site)
+[Open the live workspace](https://ielts-elite-study.ababil-cox-8536.chatgpt.site) · [Watch the product walkthrough](docs/index.html)
 
 ## Product story
 
@@ -20,9 +20,9 @@ python3 server.py
 
 Open <http://127.0.0.1:4173>.
 
-The server binds to `127.0.0.1` and stores the single learner record in `ielts_elite.sqlite3`. Browser `localStorage` remains as a recovery mirror. No package installation, API key, or build step is required.
+The server binds to `127.0.0.1` and stores the single learner record in `ielts_elite.sqlite3`. Browser `localStorage` remains as a recovery mirror, and the installable app shell keeps the core workspace available offline. No package installation, API key, or build step is required.
 
-Static-only fallback is still available with `python3 -m http.server 4173`, but it uses browser recovery mode because the SQLite API is not available.
+Static-only fallback is still available with `python3 -m http.server 4173`, but it uses browser recovery mode because the SQLite API is not available. The public Site intentionally uses this privacy-preserving browser mode; it is a real single-learner workspace rather than a fake score or a video-only demo.
 
 ## Microsoft SQL Server mode
 
@@ -77,6 +77,8 @@ After the first model download, you can double-click [`run_local.command`](run_l
 11. Revisit recorded errors through a persisted spaced-repetition Revision queue with expanding intervals.
 12. Start a timed 40-item objective mock (20 Listening + 20 Reading), optionally add Writing/Speaking evidence, autosave answers, and inspect deep review with question-type accuracy, elapsed time, and historical comparison.
 13. Review analytics and export the full local learner state as JSON.
+14. Restore a previous JSON backup when moving browsers or recovering a device.
+15. Install the workspace as an offline-capable PWA for repeated daily use.
 
 ## Honest limitations
 
@@ -85,7 +87,7 @@ After the first model download, you can double-click [`run_local.command`](run_l
 - Speaking supports Parts 1–3, typed fallback, and a browser microphone attempt. Pronunciation is never inferred from typed text, and recordings are not uploaded.
 - Writing and Speaking feedback is heuristic and explicitly marked as non-official.
 - The mock exam has 40 original objective items plus optional subjective evidence; it is not a full official-format IELTS exam or official score conversion.
-- The public static Site is available at [IELTS Elite Study](https://ielts-elite-study.ababil-cox-8536.chatgpt.site), but its browser-only mode cannot reach the private local SQL/AI server.
+- The public Site is available at [IELTS Elite Study](https://ielts-elite-study.ababil-cox-8536.chatgpt.site). Its browser-only mode is designed for one learner and cannot reach a private local SQL/AI server; use `server.py` locally when SQLite or a configured tutor provider is required.
 - The AI adapter is wired to the OpenAI Responses API but requires your own server-side API key and model configuration.
 - The app applies the official IELTS overall-band rounding rule to its provisional component estimates, but it does not perform official raw-score conversion or provide an official IELTS result. Official scoring still requires an authorised IELTS test.
 
@@ -95,4 +97,4 @@ The browser state record is stored under `ielts-elite-state-v1` and mirrored as 
 
 ## Verification
 
-See [QA_CHECKLIST.md](QA_CHECKLIST.md) for the manual workflow used during browser verification and the limitations that remain unverified in this local-only build. The latest live smoke test covered all 14 workspace routes and the public static fallback on 7 November 2026.
+See [QA_CHECKLIST.md](QA_CHECKLIST.md) for the manual workflow used during browser verification and the limitations that remain unverified in this local-first build. The latest live smoke test covered all 14 workspace routes, the public static fallback, installable app shell, and data portability flow on 7 November 2026.

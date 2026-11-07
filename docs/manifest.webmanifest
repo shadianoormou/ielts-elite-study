@@ -1,0 +1,14 @@
+{
+  "name": "IELTS Elite — Academic preparation workspace",
+  "short_name": "IELTS Elite",
+  "description": "A privacy-first, evidence-led IELTS Academic preparation workspace for real daily study.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7f2",
+  "theme_color": "#10211e",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "app-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
